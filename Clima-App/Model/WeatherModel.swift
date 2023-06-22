@@ -1,16 +1,11 @@
 
 import Foundation
 
-//MARK: - Here we create a struct to combine a whole data from struct Weather Data, and also check by computed property a condition name for SF Symbols.
-
 struct WeatherModel {
-    
     let conditionId: Int
     let cityName: String
     let temperature: Double
-    
-    var tempratureString: String { return String(format: "%.1f", temperature) }
-    
+    var tempratureString: String { return String(format: "%.0f", temperature) }
     var conditionName: String {
            switch conditionId {
                 case 200...232:
@@ -31,5 +26,4 @@ struct WeatherModel {
                     return "cloud"
                 }
     }
-    
 }

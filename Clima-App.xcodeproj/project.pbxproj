@@ -16,6 +16,7 @@
 		8429D2E028EF77EB00D09C4A /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429D2DF28EF77EB00D09C4A /* WeatherModel.swift */; };
 		8429D2E328EF788300D09C4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8429D2E228EF788300D09C4A /* Main.storyboard */; };
 		8429D2E528EF78AA00D09C4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8429D2E428EF78AA00D09C4A /* Assets.xcassets */; };
+		842C22102A448A390068692F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 842C220F2A448A390068692F /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842C22102A448A390068692F /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				8429D2DD28EF77E200D09C4A /* WeatherManager.swift */,
-				8429D2DB28EF77D600D09C4A /* WeatherData.swift */,
 				8429D2DF28EF77EB00D09C4A /* WeatherModel.swift */,
+				8429D2DB28EF77D600D09C4A /* WeatherData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -116,6 +118,9 @@
 			dependencies = (
 			);
 			name = "Clima-App";
+			packageProductDependencies = (
+				842C220F2A448A390068692F /* SnapKit */,
+			);
 			productName = "Clima-App";
 			productReference = 8429D2C228EF776000D09C4A /* Clima-App.app */;
 			productType = "com.apple.product-type.application";
@@ -144,6 +149,9 @@
 				Base,
 			);
 			mainGroup = 8429D2B928EF776000D09C4A;
+			packageReferences = (
+				842C220E2A448A390068692F /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 8429D2C328EF776000D09C4A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -386,6 +394,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		842C220E2A448A390068692F /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		842C220F2A448A390068692F /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 842C220E2A448A390068692F /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8429D2BA28EF776000D09C4A /* Project object */;
 }
