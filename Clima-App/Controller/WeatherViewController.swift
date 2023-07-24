@@ -3,16 +3,16 @@ import SnapKit
 import CoreLocation
 
 class WeatherViewController: UIViewController {
-    var weatherManeger = WeatherManager()
-    let locationManager = CLLocationManager()
+    private var weatherManeger = WeatherManager()
+    private let locationManager = CLLocationManager()
     private let background: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "background")
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    private let topStackView: UIStackView = {
-       let stackView = UIStackView()
+    private let topHorizStackView: UIStackView = {
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
@@ -20,14 +20,14 @@ class WeatherViewController: UIViewController {
         return stackView
     }()
     private let locationButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.setImage(UIImage(named: "location.circle.fill2"), for: .normal)
         button.setImage(UIImage(named: "location.circle.Highlighted"), for: .highlighted)
         button.imageView?.contentMode = .scaleAspectFill
         return button
     }()
     private let searchTextField: UITextField = {
-       let textField = UITextField()
+        let textField = UITextField()
         textField.placeholder = "search"
         textField.textAlignment = .right
         textField.backgroundColor = .systemFill
@@ -37,21 +37,21 @@ class WeatherViewController: UIViewController {
         return textField
     }()
     private let searchButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.setImage(UIImage(named: "magnifyingglass"), for: .normal)
         button.setImage(UIImage(named: "buttonImageHighlighted"), for: .highlighted)
         button.imageView?.contentMode = .scaleAspectFill
         return button
     }()
     private let conditionImage: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.image = UIImage(systemName: "sun.max")
-        imageView.contentMode = .scaleAspectFit
         imageView.tintColor = UIColor(named: "weather")
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     private let tempStackView: UIStackView = {
-       let stackView = UIStackView()
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
@@ -61,20 +61,19 @@ class WeatherViewController: UIViewController {
     private let temperatureLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 80, weight: .black)
-        label.textAlignment = .right
         label.textColor = .label
         return label
     }()
     private let endTemperature: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 100, weight: .light)
-        label.textAlignment = .right
         label.textColor = .label
         label.text = "°C"
+        label.isHidden = true
         return label
     }()
     private let cityLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.font = .systemFont(ofSize: 30)
         label.textAlignment = .right
         label.textColor = .label
@@ -99,10 +98,10 @@ class WeatherViewController: UIViewController {
     }
     func style() {
         view.addSubview(background)
-        view.addSubview(topStackView)
-        topStackView.addArrangedSubview(locationButton)
-        topStackView.addArrangedSubview(searchTextField)
-        topStackView.addArrangedSubview(searchButton)
+        view.addSubview(topHorizStackView)
+        topHorizStackView.addArrangedSubview(locationButton)
+        topHorizStackView.addArrangedSubview(searchTextField)
+        topHorizStackView.addArrangedSubview(searchButton)
         view.addSubview(conditionImage)
         view.addSubview(tempStackView)
         tempStackView.addArrangedSubview(temperatureLabel)
@@ -113,7 +112,7 @@ class WeatherViewController: UIViewController {
         background.snp.makeConstraints { make in
             make.leading.top.trailing.bottom.equalToSuperview()
         }
-        topStackView.snp.makeConstraints { make in
+        topHorizStackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.leading.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
@@ -125,7 +124,7 @@ class WeatherViewController: UIViewController {
             make.height.width.equalTo(35)
         }
         conditionImage.snp.makeConstraints { make in
-            make.top.equalTo(topStackView.snp.bottom).offset(15)
+            make.top.equalTo(topHorizStackView.snp.bottom).offset(15)
             make.trailing.equalToSuperview().offset(-10)
             make.height.width.equalTo(120)
         }
@@ -138,7 +137,7 @@ class WeatherViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-10)
         }
     }
-
+    
     @objc func locationPressed() {
         locationManager.requestLocation()
     }
@@ -149,37 +148,22 @@ class WeatherViewController: UIViewController {
 
 extension WeatherViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        searchTextField.endEditing(true)
+        textField.endEditing(true)
         return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != ""{
+        if textField.text != "" {
             return true
         } else {
             textField.placeholder = "Type something"
             return false
         }
     }
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let cityName = searchTextField.text {
+        if let cityName = textField.text {
             weatherManeger.fetchWeather(cityName: cityName)
         }
-        searchTextField.text = ""
-    }
-}
-extension WeatherViewController: WeatherManagerDelegate {
-    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        DispatchQueue.main.async {
-            self.temperatureLabel.text = weather.tempratureString
-            self.conditionImage.image = UIImage(systemName: weather.conditionName)
-            self.cityLabel.text = weather.cityName
-        }
-    }
-    func didFailError(error: Error) {
-        DispatchQueue.main.async {
-            self.cityLabel.text = error.localizedDescription
-        }
+        textField.text = ""
     }
 }
 extension WeatherViewController: CLLocationManagerDelegate {
@@ -192,6 +176,21 @@ extension WeatherViewController: CLLocationManagerDelegate {
         }
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        self.cityLabel.text = error.localizedDescription
+    }
+}
+extension WeatherViewController: WeatherManagerDelegate {
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.tempratureString
+            self.conditionImage.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
+            self.endTemperature.isHidden = false
+        }
+    }
+    func didFailError(error: Error) {
+        DispatchQueue.main.async {
             self.cityLabel.text = error.localizedDescription
+        }
     }
 }
